@@ -5,22 +5,39 @@
  * This program senses distance
 */
 
-let ObjectDistance: number = 0
+let lightLevel = 0
+let neopixelStrip: neopixel.Strip = null
+let setPixelColor = 0
 
 //setup
-
 basic.showIcon(IconNames.Happy)
-
+neopixelStrip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
+neopixelStrip.setPixelColor(0, neopixel.colors(NeoPixelColors.Black))
+neopixelStrip.setPixelColor(1, neopixel.colors(NeoPixelColors.Black))
+neopixelStrip.setPixelColor(2, neopixel.colors(NeoPixelColors.Black))
+neopixelStrip.setPixelColor(3, neopixel.colors(NeoPixelColors.Black))
+neopixelStrip.show()
 
 //getting distance from sonar
-
-    input.onButtonPressed(Button.A, function() {
-        basic.clearScreen()
-        ObjectDistance = sonar.ping (
+input.onButtonPressed(Button.A, function() {
+    basic.clearScreen()
+    let objectDistance = sonar.ping (
         DigitalPin.P1,
         DigitalPin.P2,
         PingUnit.Centimeters
-)
-basic.showNumber (ObjectDistance)
-basic.showIcon(IconNames.Happy)
+    )
+
+    basic.showNumber(objectDistance)
+    basic.showIcon(IconNames.Happy)
+    if (objectDistance > 10) {
+        neopixelStrip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+        neopixelStrip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+        neopixelStrip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+        neopixelStrip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        neopixelStrip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+        neopixelStrip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+        neopixelStrip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+        neopixelStrip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
 })
